@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <title>::.Toko jualan online.::</title>
+  <!-- Menghubungkan CSS -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .site-shell nav {
+      background: #fff5e9 !important;
+    }
+
+    .site-shell nav a,
+    .site-shell .nav-product-dropdown > summary,
+    .site-shell .nav-product-menu a,
+    .site-shell nav a:hover,
+    .site-shell .nav-product-dropdown > summary:hover,
+    .site-shell .nav-product-dropdown[open] > summary,
+    .site-shell .nav-product-menu a:hover,
+    .site-shell header h1,
+    .site-shell header p,
+    .site-shell nav::before {
+      color: #9f252c !important;
+    }
+
+    .site-shell nav a,
+    .site-shell .nav-product-dropdown > summary {
+      color: #49312a !important;
+    }
+
+    .site-shell nav a:hover,
+    .site-shell .nav-product-dropdown > summary:hover,
+    .site-shell .nav-product-dropdown[open] > summary,
+    .site-shell .nav-product-menu a:hover {
+      background: var(--snack-sage-soft) !important;
+      color: var(--snack-sage-ink) !important;
+    }
+
+    .site-shell .nav-product-menu {
+      background: #fffaf2 !important;
+      border-color: #f0d8ca !important;
+    }
+
+    .site-shell header {
+      background: #fff5e9 !important;
+    }
+
+    .site-shell footer {
+      background: #fff5e9 !important;
+      color: #75564d !important;
+    }
+  </style>
+</head>
+
+<body class="site-shell">
+
+  <div class="site-topbar">
+    <nav>
+      <a href="home.html" target="konten">Home</a>
+      <a href="profil.html" target="konten">Profil</a>
+      <a href="kontak.html" target="konten">Kontak</a>
+      <div class="nav-product-dropdown">
+        <a class="nav-products-link" href="products2.html" target="konten">Products</a>
+        <button class="nav-product-toggle" type="button" aria-label="Tampilkan kategori produk" aria-expanded="false" aria-controls="product-menu">
+          <span aria-hidden="true">✿</span>
+        </button>
+        <div class="nav-product-menu" id="product-menu" hidden>
+          <a href="products2.html#bliss-snacks" target="konten">Aneka Snacks</a>
+          <a href="products2.html#category-c" target="konten">Good &amp; Gather</a>
+          <a href="products2.html#category-d" target="konten">Oh Me!</a>
+          <a href="products2.html#category-e" target="konten">Trü Frü</a>
+          <a href="products2.html#category-f" target="konten">RIND</a>
+          <a class="all-products-link" href="all-products.html#all-products" target="konten">All Products</a>
+        </div>
+      </div>
+      <a href="cabangtoko.html" target="konten">Toko Cabang</a>
+      <a href="supplier.html" target="konten">Supplier</a>
+      <a class="nav-cart-link" href="checkout.html" target="konten" aria-label="Cart, 0 produk">
+        <span class="nav-cart-icon" aria-hidden="true">🛒</span>
+        <span>Cart</span>
+        <span class="nav-cart-count" id="nav-cart-count" hidden>0</span>
+      </a>
+    </nav>
+    <header>
+      <h1>TOKO BUAH FREEZE DRIED</h1>
+      <p>makanan enak dan sehat</p>
+    </header>
+  </div>
+
+  <!-- KONTEN -->
+  <main class="site-content">
+    <iframe
+      class="site-frame"
+      src="home.html"
+      name="konten"
+      scrolling="no"
+      title="Area Konten Website">
+    </iframe>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Toko Jualan Online All Right Reserved</p>
+  </footer>
+
+  <script>
+    const contentFrame = document.querySelector('.site-frame');
+    const cartCountBadge = document.querySelector('#nav-cart-count');
+    const productDropdown = document.querySelector('.nav-product-dropdown');
+    const productsLink = document.querySelector('.nav-products-link');
+    const productMenuToggle = document.querySelector('.nav-product-toggle');
+    const productMenu = document.querySelector('.nav-product-menu');
+    let lastScrollY = window.scrollY;
+    let scrollIntent = 0;
+    let scrollIntentTimer;
+    const headerRevealThreshold = 96;
+
+    function updateCartCount(count) {
+      const safeCount = Math.max(0, Number(count) || 0);
+      cartCountBadge.textContent = String(safeCount);
+      cartCountBadge.hidden = safeCount === 0;
+      document.querySelector('.nav-cart-link').setAttribute('aria-label', `Cart, ${safeCount} produk`);
+    }
+
+    function readCartCount() {
+      try {
+        const cart = JSON.parse(localStorage.getItem('freezeDriedCart') || '[]');
+        if (!Array.isArray(cart)) throw new Error('Data cart harus berupa daftar.');
+        updateCartCount(cart.reduce((total, item) => total + (Number(item.quantity) || 0), 0));
+      } catch (error) {
+        console.error('Gagal membaca jumlah produk cart:', error);
+        updateCartCount(0);
+      }
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.source !== contentFrame.contentWindow || !event.data) return;
+
+      if (event.data.type === 'freeze-dried-cart-updated') {
+        updateCartCount(event.data.count);
+      } else if (event.data.type === 'frame-content-height') {
+        const contentHeight = Number(event.data.height);
+        if (!Number.isFinite(contentHeight) || contentHeight <= 0) return;
+        contentFrame.style.height = `${Math.max(350, Math.ceil(contentHeight))}px`;
+      } else if (event.data.type === 'frame-content-hash') {
+        scrollToFrameSection(event.data.top);
+      } else if (event.data.type === 'frame-scroll-intent') {
+        setScrollIntent(event.data.deltaY);
+        window.scrollBy(0, Number(event.data.deltaY) || 0);
+      }
+    });
+    readCartCount();
+
+    function setProductMenuOpen(isOpen) {
+      productDropdown.classList.toggle('is-open', isOpen);
+      productMenuToggle.setAttribute('aria-expanded', String(isOpen));
+      productMenu.hidden = !isOpen;
+    }
+
+    productMenuToggle.addEventListener('click', () => {
+      setProductMenuOpen(productMenuToggle.getAttribute('aria-expanded') !== 'true');
+    });
+    productsLink.addEventListener('click', () => {
+      setProductMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    productMenu.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setProductMenuOpen(false);
+    });
+    document.addEventListener('click', (event) => {
+      if (!productDropdown.contains(event.target)) setProductMenuOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setProductMenuOpen(false);
+        productMenuToggle.focus();
+      }
+    });
+
+    document.body.classList.toggle('is-scrolled', window.scrollY > 32);
+
+    function setScrollIntent(direction) {
+      scrollIntent = Math.sign(direction);
+      updateHeaderVisibility(scrollIntent);
+      window.clearTimeout(scrollIntentTimer);
+      scrollIntentTimer = window.setTimeout(() => {
+        scrollIntent = 0;
+      }, 700);
+    }
+
+    function updateHeaderVisibility(direction) {
+      const shouldCollapse = direction > 0 || window.scrollY > headerRevealThreshold;
+      document.body.classList.toggle('is-scrolled', shouldCollapse);
+    }
+
+    function updateScrollState() {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+      if (scrollIntent) {
+        updateHeaderVisibility(scrollIntent);
+      } else if (scrollDelta) {
+        updateHeaderVisibility(Math.sign(scrollDelta));
+      }
+      lastScrollY = currentScrollY;
+    }
+
+    function handleWheel(event) {
+      if (event.deltaY) setScrollIntent(event.deltaY);
+    }
+
+    let lastTouchPoint;
+    function handleTouchStart(event) {
+      const touch = event.touches[0];
+      if (touch) lastTouchPoint = { x: touch.clientX, y: touch.clientY };
+    }
+
+    function handleTouchMove(event) {
+      const touch = event.touches[0];
+      if (!touch || !lastTouchPoint) return;
+
+      const deltaX = lastTouchPoint.x - touch.clientX;
+      const deltaY = lastTouchPoint.y - touch.clientY;
+      if (Math.abs(deltaY) <= Math.abs(deltaX)) return;
+
+      event.preventDefault();
+      setScrollIntent(deltaY);
+      window.scrollBy(0, deltaY);
+      lastTouchPoint = { x: touch.clientX, y: touch.clientY };
+    }
+
+    function handleKeyScroll(event) {
+      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+        setScrollIntent(1);
+      } else if (['ArrowUp', 'PageUp', 'Home'].includes(event.key)) {
+        setScrollIntent(-1);
+      }
+    }
+
+    function scrollToFrameSection(contentTop) {
+      const targetTop = Number(contentTop);
+      if (!Number.isFinite(targetTop)) return;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const frameTop = contentFrame.getBoundingClientRect().top + window.scrollY;
+          const stickyHeight = document.querySelector('.site-topbar').getBoundingClientRect().height;
+          window.scrollTo({
+            top: Math.max(0, frameTop + targetTop - stickyHeight - 18),
+            behavior: 'smooth'
+          });
+        });
+      });
+    }
+
+    contentFrame.addEventListener('load', () => {
+      readCartCount();
+      contentFrame.contentWindow.postMessage({ type: 'frame-measure-request' }, '*');
+    });
+
+    window.addEventListener('resize', () => {
+      contentFrame.contentWindow.postMessage({ type: 'frame-measure-request' }, '*');
+    }, { passive: true });
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('keydown', handleKeyScroll);
+  </script>
+</body>
+</html>

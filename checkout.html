@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Toko Buah Freeze Dried</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="checkout-page">
+  <main class="checkout-main">
+    <div class="checkout-heading">
+      <div>
+        <p class="catalog-eyebrow">Hampir selesai</p>
+        <h1>Checkout</h1>
+      </div>
+      <a class="detail-back" href="products2.html">← Lanjut belanja</a>
+    </div>
+
+    <div class="checkout-layout">
+      <section class="checkout-section checkout-summary" aria-labelledby="summary-title">
+        <div class="checkout-section-heading">
+          <h2 id="summary-title">Pesanan Anda</h2>
+          <span id="cart-count">0 produk</span>
+        </div>
+        <div id="checkout-items" class="checkout-items"></div>
+
+        <div class="promo-entry">
+          <label for="promo-code">Kode promo / voucher</label>
+          <div class="promo-controls">
+            <input id="promo-code" type="text" placeholder="Masukkan kode">
+            <button id="apply-promo" type="button" class="secondary-button">Pakai</button>
+          </div>
+          <p id="promo-message" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+
+        <dl class="price-breakdown">
+          <div><dt>Subtotal produk</dt><dd id="subtotal-value">$0.00</dd></div>
+          <div id="discount-row" hidden><dt>Diskon voucher</dt><dd id="discount-value">-$0.00</dd></div>
+          <div><dt>PPN (11%)</dt><dd id="tax-value">$0.00</dd></div>
+          <div><dt>Biaya layanan</dt><dd id="service-value">$0.00</dd></div>
+          <div><dt>Biaya pengemasan</dt><dd id="packaging-value">$0.00</dd></div>
+          <div><dt>Biaya pengiriman</dt><dd id="shipping-value">$0.00</dd></div>
+          <div class="price-total"><dt>Total pembayaran</dt><dd id="total-value">$0.00</dd></div>
+        </dl>
+      </section>
+
+      <form class="checkout-form" id="checkout-form">
+        <section class="checkout-section" aria-labelledby="shipping-title">
+          <h2 id="shipping-title">Informasi Pengiriman</h2>
+          <label class="checkout-field" for="recipient-name">Nama penerima
+            <input id="recipient-name" name="recipientName" autocomplete="name" required>
+          </label>
+          <div class="checkout-field-row">
+            <label class="checkout-field" for="recipient-phone">Nomor telepon
+              <input id="recipient-phone" name="phone" type="tel" autocomplete="tel" required>
+            </label>
+            <label class="checkout-field" for="recipient-email">Email
+              <input id="recipient-email" name="email" type="email" autocomplete="email" required>
+            </label>
+          </div>
+          <label class="checkout-field" for="shipping-address">Alamat lengkap
+            <textarea id="shipping-address" name="shippingAddress" rows="3" autocomplete="street-address" required></textarea>
+          </label>
+          <div class="checkout-field-row">
+            <label class="checkout-field" for="shipping-city">Kota
+              <input id="shipping-city" name="city" autocomplete="address-level2" required>
+            </label>
+            <label class="checkout-field" for="shipping-postal">Kode pos
+              <input id="shipping-postal" name="postalCode" inputmode="numeric" autocomplete="postal-code" required>
+            </label>
+          </div>
+          <label class="checkout-field" for="courier">Kurir pengiriman
+            <select id="courier" name="courier">
+              <option value="regular">Regular · $4.00</option>
+              <option value="express">Express · $8.00</option>
+              <option value="same-day">Same day · $12.00</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="checkout-section" aria-labelledby="payment-title">
+          <h2 id="payment-title">Metode Pembayaran</h2>
+          <div class="payment-options">
+            <label><input type="radio" name="payment" value="bank-transfer" required> Transfer bank</label>
+            <label><input type="radio" name="payment" value="ewallet"> E-wallet</label>
+            <label><input type="radio" name="payment" value="cod"> Bayar di tempat (COD)</label>
+          </div>
+        </section>
+
+        <section class="checkout-section" aria-labelledby="billing-title">
+          <h2 id="billing-title">Informasi Tagihan</h2>
+          <label class="billing-toggle"><input id="billing-same" type="checkbox" checked> Alamat tagihan sama dengan alamat pengiriman</label>
+          <div id="billing-fields" class="billing-fields" hidden>
+            <label class="checkout-field" for="billing-name">Nama pada tagihan
+              <input id="billing-name" name="billingName" autocomplete="billing name">
+            </label>
+            <label class="checkout-field" for="billing-address">Alamat tagihan
+              <textarea id="billing-address" name="billingAddress" rows="3" autocomplete="billing street-address"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <button class="checkout-submit" id="place-order" type="submit">Buat Pesanan</button>
+        <p id="checkout-message" class="checkout-message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <section class="checkout-recommendations" aria-labelledby="recommendations-title">
+      <div class="checkout-recommendations-heading">
+        <div>
+          <p class="catalog-eyebrow">Temukan camilan favoritmu</p>
+          <h2 id="recommendations-title">You might like</h2>
+        </div>
+        <a href="products2.html">Lihat semua produk <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="checkout-recommendation-grid">
+        <a class="checkout-recommendation-card" href="product-detail.html?product=mango">
+          <span class="checkout-recommendation-image"><img src="buah1.jpg" alt="Kemasan freeze-dried mango"></span>
+          <span class="checkout-recommendation-info"><strong>Freeze-Dried Mango</strong><span>Aneka Snacks · From $15 / pack</span></span>
+          <span class="checkout-recommendation-action" aria-hidden="true">↗</span>
+        </a>
+        <a class="checkout-recommendation-card" href="product-detail.html?product=banana">
+          <span class="checkout-recommendation-image"><img src="buah2.jpg" alt="Kemasan freeze-dried banana"></span>
+          <span class="checkout-recommendation-info"><strong>Freeze-Dried Banana</strong><span>Aneka Snacks · From $15 / pack</span></span>
+          <span class="checkout-recommendation-action" aria-hidden="true">↗</span>
+        </a>
+        <a class="checkout-recommendation-card" href="product-detail.html?product=blueberry">
+          <span class="checkout-recommendation-image"><img src="buah4.jpg" alt="Kemasan freeze-dried blueberry"></span>
+          <span class="checkout-recommendation-info"><strong>Freeze-Dried Blueberry</strong><span>Aneka Snacks · From $15 / pack</span></span>
+          <span class="checkout-recommendation-action" aria-hidden="true">↗</span>
+        </a>
+        <a class="checkout-recommendation-card" href="product-detail.html?product=strawberry">
+          <span class="checkout-recommendation-image"><img src="buah3.jpg" alt="Kemasan freeze-dried strawberry"></span>
+          <span class="checkout-recommendation-info"><strong>Freeze-Dried Strawberry</strong><span>Aneka Snacks · From $15 / pack</span></span>
+          <span class="checkout-recommendation-action" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="catalog-data.js"></script>
+  <script>
+    const cartStorageKey = 'freezeDriedCart';
+    const products = Object.fromEntries(window.FREEZE_DRY_CATALOG.products.map((product) => [
+      product.id,
+      { name: product.name, image: product.image }
+    ]));
+    const variants = {
+      'normal-sugar': 'Normal Sugar',
+      'less-sugar': 'Less Sugar',
+      'no-sugar': 'No Sugar',
+      'more-sugar': 'More Sugar'
+    };
+    const sizes = { small: 'Small', medium: 'Medium', large: 'Large' };
+    const sizePrices = { small: 15, medium: 20, large: 25 };
+    const shippingFees = { regular: 4, express: 8, 'same-day': 12 };
+    const promoCodes = {
+      HEMAT10: { type: 'percent', value: 0.1 },
+      BUAH5: { type: 'fixed', value: 5 },
+      KISACANTIK: { type: 'free' }
+    };
+    const checkoutItems = document.querySelector('#checkout-items');
+    const checkoutForm = document.querySelector('#checkout-form');
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+    const money = (amount) => `$${amount.toFixed(2)}`;
+    let cart = readCart();
+    let activePromo = null;
+
+    function notifyParentOfContentChange() {
+      if (window.parent === window) return;
+      const count = cart.reduce((total, item) => total + Number(item.quantity), 0);
+      window.parent.postMessage({ type: 'freeze-dried-cart-updated', count }, '*');
+    }
+
+    function readCart() {
+      try {
+        const storedCart = JSON.parse(localStorage.getItem(cartStorageKey) || '[]');
+        if (!Array.isArray(storedCart)) throw new Error('Data keranjang tidak valid.');
+
+        const productCounts = new Map();
+        const groupedCart = new Map();
+        storedCart.filter((item) => products[item.product] && Number(item.quantity) > 0)
+          .forEach((item) => {
+            const size = sizes[item.size] ? item.size : 'small';
+            const variant = variants[item.variant] ? item.variant : 'normal-sugar';
+            const productCount = productCounts.get(item.product) || 0;
+            const quantity = Math.min(
+              99 - productCount,
+              Math.max(0, Math.floor(Number(item.quantity)))
+            );
+            if (!quantity) return;
+
+            const key = JSON.stringify([item.product, variant, size]);
+            const groupedItem = groupedCart.get(key);
+            if (groupedItem) {
+              groupedItem.quantity += quantity;
+            } else {
+              groupedCart.set(key, {
+                ...item,
+                product: item.product,
+                variant,
+                size,
+                unitPrice: sizePrices[size],
+                quantity
+              });
+            }
+            productCounts.set(item.product, productCount + quantity);
+          });
+
+        const usedIds = new Set();
+        return [...groupedCart.values()].map((item) => {
+          let id = String(item.id || '');
+          while (!id || usedIds.has(id)) {
+            id = `${item.product}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+          }
+          usedIds.add(id);
+          return { ...item, id };
+        });
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCart() {
+      localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart() {
+      checkoutItems.innerHTML = cart.map((item) => {
+        const product = products[item.product];
+        const unitPrice = sizePrices[item.size] || sizePrices.small;
+        return `
+          <article class="checkout-item" data-item-id="${escapeHTML(item.id)}">
+            <img src="${product.image}" alt="${escapeHTML(product.name)}">
+            <div class="checkout-item-info">
+              <h3>${escapeHTML(product.name)}</h3>
+              <p>
+                ${escapeHTML(variants[item.variant] || 'Normal Sugar')} · ${escapeHTML(sizes[item.size] || 'Small')}
+                <button class="edit-size" type="button" data-edit-size aria-expanded="false" aria-controls="size-editor-${escapeHTML(item.id)}">Edit</button>
+              </p>
+              <strong>${money(unitPrice)} / item</strong>
+              <div class="item-controls">
+                <div class="quantity-stepper" aria-label="Jumlah ${escapeHTML(product.name)}">
+                  <button class="quantity-step" type="button" data-quantity-change="-1" aria-label="Kurangi ${escapeHTML(product.name)}">−</button>
+                  <input class="item-quantity" type="number" min="1" max="99" value="${item.quantity}" aria-label="Jumlah ${escapeHTML(product.name)}">
+                  <button class="quantity-step" type="button" data-quantity-change="1" aria-label="Tambah ${escapeHTML(product.name)}">+</button>
+                </div>
+                <button class="remove-item" type="button" data-remove="${escapeHTML(item.id)}">Hapus</button>
+              </div>
+              <div class="size-editor" id="size-editor-${escapeHTML(item.id)}" hidden>
+                <label for="size-count-${escapeHTML(item.id)}">Jumlah yang diubah
+                  <input class="size-edit-count" id="size-count-${escapeHTML(item.id)}" type="number" min="1" max="${item.quantity}" value="1" required>
+                </label>
+                <label for="variant-${escapeHTML(item.id)}">Level gula
+                  <select class="item-variant" id="variant-${escapeHTML(item.id)}">
+                    ${Object.entries(variants).map(([value, label]) => `<option value="${value}" ${item.variant === value ? 'selected' : ''}>${label}</option>`).join('')}
+                  </select>
+                </label>
+                <label for="size-${escapeHTML(item.id)}">Ukuran
+                  <select class="item-size" id="size-${escapeHTML(item.id)}">
+                    ${Object.entries(sizes).map(([value, label]) => `<option value="${value}" ${item.size === value ? 'selected' : ''}>${label} · ${money(sizePrices[value])}</option>`).join('')}
+                  </select>
+                </label>
+                <button class="save-size" type="button" data-save-size>Simpan</button>
+                <button class="cancel-size" type="button" data-cancel-size>Batal</button>
+              </div>
+            </article>`;
+        }).join('');
+
+      localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+      const productQuantities = new Map();
+      cart.forEach((item) => {
+        productQuantities.set(item.product, (productQuantities.get(item.product) || 0) + Number(item.quantity));
+      });
+      checkoutItems.querySelectorAll('.checkout-item').forEach((itemElement) => {
+        const item = cart.find((cartItem) => cartItem.id === itemElement.dataset.itemId);
+        const plusButton = itemElement.querySelector('[data-quantity-change="1"]');
+        plusButton.disabled = productQuantities.get(item.product) >= 99;
+      });
+      const itemCount = cart.reduce((sum, item) => sum + Number(item.quantity), 0);
+      document.querySelector('#cart-count').textContent = `${itemCount} produk`;
+      if (cart.length === 0) {
+        checkoutItems.innerHTML = '<p class="empty-cart">Keranjang masih kosong. <a href="products2.html">Pilih produk</a></p>';
+      }
+      document.querySelector('#place-order').disabled = cart.length === 0;
+      updateTotals();
+      notifyParentOfContentChange();
+    }
+
+    function updateTotals() {
+      const quantity = cart.reduce((sum, item) => sum + Number(item.quantity), 0);
+      const subtotal = cart.reduce((sum, item) => sum + (sizePrices[item.size] || sizePrices.small) * Number(item.quantity), 0);
+      const isFreeOrder = activePromo?.type === 'free';
+      const productDiscount = activePromo && !isFreeOrder
+        ? Math.min(activePromo.type === 'percent' ? subtotal * activePromo.value : activePromo.value, subtotal)
+        : 0;
+      const tax = (subtotal - productDiscount) * 0.11;
+      const service = cart.length ? 1.5 : 0;
+      const packaging = quantity * 0.5;
+      const shipping = cart.length ? shippingFees[document.querySelector('#courier').value] : 0;
+      const orderTotal = subtotal - productDiscount + tax + service + packaging + shipping;
+      const discount = isFreeOrder ? orderTotal : productDiscount;
+      const total = isFreeOrder ? orderTotal - discount : orderTotal;
+
+      document.querySelector('#subtotal-value').textContent = money(subtotal);
+      document.querySelector('#discount-value').textContent = `-${money(discount)}`;
+      document.querySelector('#discount-row').hidden = discount === 0;
+      document.querySelector('#tax-value').textContent = money(tax);
+      document.querySelector('#service-value').textContent = money(service);
+      document.querySelector('#packaging-value').textContent = money(packaging);
+      document.querySelector('#shipping-value').textContent = money(shipping);
+      document.querySelector('#total-value').textContent = money(total);
+    }
+
+    checkoutItems.addEventListener('change', (event) => {
+      if (!event.target.matches('.item-quantity')) return;
+      const itemElement = event.target.closest('.checkout-item');
+      const item = cart.find((cartItem) => cartItem.id === itemElement.dataset.itemId);
+      if (!item) return;
+
+      const otherProductQuantity = cart
+        .filter((cartItem) => cartItem.product === item.product && cartItem.id !== item.id)
+        .reduce((total, cartItem) => total + Number(cartItem.quantity), 0);
+      const requestedQuantity = Math.max(1, Math.floor(Number(event.target.value) || 1));
+      item.quantity = Math.min(requestedQuantity, 99 - otherProductQuantity);
+      saveCart();
+    });
+
+    checkoutItems.addEventListener('click', (event) => {
+      const quantityButton = event.target.closest('[data-quantity-change]');
+      if (quantityButton) {
+        const itemElement = quantityButton.closest('.checkout-item');
+        const item = cart.find((cartItem) => cartItem.id === itemElement.dataset.itemId);
+        if (!item) return;
+        const productQuantity = cart
+          .filter((cartItem) => cartItem.product === item.product)
+          .reduce((total, cartItem) => total + Number(cartItem.quantity), 0);
+        const nextQuantity = Number(item.quantity) + Number(quantityButton.dataset.quantityChange);
+        if (nextQuantity < 1 || (nextQuantity > item.quantity && productQuantity >= 99)) return;
+        item.quantity = nextQuantity;
+        saveCart();
+        return;
+      }
+
+      const editButton = event.target.closest('[data-edit-size]');
+      if (editButton) {
+        const editor = editButton.closest('.checkout-item-info').querySelector('.size-editor');
+        editor.hidden = false;
+        editButton.setAttribute('aria-expanded', 'true');
+        const editCount = editor.querySelector('.size-edit-count');
+        editCount.max = editButton.closest('.checkout-item').querySelector('.item-quantity').value;
+        editCount.value = '1';
+        editor.querySelector('select').focus();
+        notifyParentOfContentChange();
+        return;
+      }
+
+      const cancelButton = event.target.closest('[data-cancel-size]');
+      if (cancelButton) {
+        const itemInfo = cancelButton.closest('.checkout-item-info');
+        itemInfo.querySelector('.size-editor').hidden = true;
+        itemInfo.querySelector('[data-edit-size]').setAttribute('aria-expanded', 'false');
+        notifyParentOfContentChange();
+        return;
+      }
+
+      const saveSizeButton = event.target.closest('[data-save-size]');
+      if (saveSizeButton) {
+        const itemInfo = saveSizeButton.closest('.checkout-item-info');
+        const itemElement = saveSizeButton.closest('.checkout-item');
+        const itemIndex = cart.findIndex((cartItem) => cartItem.id === itemElement.dataset.itemId);
+        const item = cart[itemIndex];
+        const selectedSize = itemInfo.querySelector('.item-size').value;
+        const selectedVariant = itemInfo.querySelector('.item-variant').value;
+        const editCountInput = itemInfo.querySelector('.size-edit-count');
+        const editCount = Math.floor(Number(editCountInput.value));
+        if (!editCountInput.reportValidity()) return;
+        if (!item || !sizes[selectedSize] || !variants[selectedVariant] || editCount < 1 || editCount > item.quantity) return;
+
+        if (selectedSize === item.size && selectedVariant === item.variant) {
+          itemInfo.querySelector('.size-editor').hidden = true;
+          itemInfo.querySelector('[data-edit-size]').setAttribute('aria-expanded', 'false');
+          return;
+        }
+
+        item.quantity -= editCount;
+        const existingItem = cart.find((cartItem) => (
+          cartItem.product === item.product
+          && cartItem.variant === selectedVariant
+          && cartItem.size === selectedSize
+        ));
+        if (existingItem) {
+          existingItem.quantity += editCount;
+        } else {
+          cart.push({
+            ...item,
+            id: `${item.product}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+            variant: selectedVariant,
+            size: selectedSize,
+            unitPrice: sizePrices[selectedSize],
+            quantity: editCount
+          });
+        }
+        if (!item.quantity) {
+          cart.splice(itemIndex, 1);
+        }
+        saveCart();
+        return;
+      }
+
+      const removeButton = event.target.closest('[data-remove]');
+      if (!removeButton) return;
+      cart = cart.filter((item) => item.id !== removeButton.dataset.remove);
+      saveCart();
+    });
+
+    document.querySelector('#apply-promo').addEventListener('click', () => {
+      const code = document.querySelector('#promo-code').value.trim().toUpperCase();
+      const message = document.querySelector('#promo-message');
+      activePromo = promoCodes[code] || null;
+      if (activePromo) {
+        message.textContent = `Kode ${code} berhasil digunakan.`;
+      } else {
+        message.textContent = code ? 'Kode voucher tidak valid.' : 'Masukkan kode voucher terlebih dahulu.';
+      }
+      updateTotals();
+      notifyParentOfContentChange();
+    });
+
+    document.querySelector('#courier').addEventListener('change', updateTotals);
+
+    document.querySelector('#billing-same').addEventListener('change', (event) => {
+      const billingFields = document.querySelector('#billing-fields');
+      billingFields.hidden = event.target.checked;
+      billingFields.querySelectorAll('input, textarea').forEach((field) => {
+        field.required = !event.target.checked;
+      });
+      notifyParentOfContentChange();
+    });
+
+    checkoutForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!cart.length || !checkoutForm.reportValidity()) return;
+      localStorage.setItem(cartStorageKey, '[]');
+      cart = [];
+      const placeOrderButton = document.querySelector('#place-order');
+      placeOrderButton.disabled = true;
+      placeOrderButton.textContent = 'Pesanan selesai';
+      document.querySelector('#checkout-message').textContent = 'Terima kasih sudah beli dari kami! Pesanan demo berhasil dibuat; pembayaran belum terhubung ke layanan nyata.';
+      document.querySelector('#checkout-message').classList.add('is-success');
+      notifyParentOfContentChange();
+    });
+
+    renderCart();
+  </script>
+<script src="frame-resize.js"></script>
+</body>
+</html>

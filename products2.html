@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Produk | Aneka Snacks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="catalog-page">
+  <main class="catalog-main">
+    <section class="catalog-hero" aria-labelledby="catalog-hero-title">
+      <div class="catalog-hero-copy">
+        <p class="catalog-eyebrow">Aneka snacks · Buah pilihan</p>
+        <h1 id="catalog-hero-title">Camilan ceria,<br>dibuat dari buah.</h1>
+        <p>Temukan rasa renyah favoritmu dari berbagai merek untuk menemani hari.</p>
+        <div class="catalog-search-wrap">
+          <label class="catalog-search">
+            <span class="catalog-search-icon" aria-hidden="true">⌕</span>
+            <input id="product-search" type="search" placeholder="Cari rasa atau merek..." autocomplete="off" aria-label="Cari rasa atau merek">
+          </label>
+          <div class="catalog-search-suggestions" id="product-suggestions" role="listbox" aria-label="Saran pencarian" hidden></div>
+        </div>
+        <a href="#bliss-snacks" class="catalog-hero-button">Jelajahi rasa <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+    <div class="catalog-marquee" aria-label="Berbagai merek · Buah pilihan · Temukan rasa favoritmu">
+      <div class="catalog-marquee-track" aria-hidden="true">
+        <span>Buah pilihan <b>✦</b> Aneka merek <b>✦</b> Renyah dan praktis <b>✦</b> Temukan rasa favoritmu <b>✦</b></span>
+        <span>Buah pilihan <b>✦</b> Aneka merek <b>✦</b> Renyah dan praktis <b>✦</b> Temukan rasa favoritmu <b>✦</b></span>
+      </div>
+    </div>
+    <div id="catalog-collections"></div>
+    <p class="catalog-search-empty" id="search-empty" role="status" hidden>Produk tidak ditemukan. Coba kata kunci lain.</p>
+    <section class="catalog-thoughts" aria-labelledby="catalog-thoughts-title">
+      <p class="catalog-eyebrow">Buah pilihan, cara baru menikmati camilan</p>
+      <h2 id="catalog-thoughts-title">Happy thoughts</h2>
+      <div class="catalog-thought-cards">
+        <article><span aria-hidden="true">✦</span><p>Rasa buah yang akrab, dalam camilan renyah untuk kapan saja.</p></article>
+        <article><span aria-hidden="true">✿</span><p>Pilihan buah yang praktis dibawa saat beraktivitas.</p></article>
+        <article><span aria-hidden="true">♡</span><p>Pilih rasa dan ukuran favoritmu, lalu nikmati dengan caramu.</p></article>
+      </div>
+    </section>
+  </main>
+  <script src="catalog-data.js"></script>
+  <script src="cart.js"></script>
+  <script>
+    const { products, collections } = window.FREEZE_DRY_CATALOG;
+    const collectionsRoot = document.querySelector('#catalog-collections');
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+
+    function renderProduct(product) {
+      return `<article class="product-card" data-product-card="${escapeHTML(product.id)}">
+        <a class="product-card-link" href="product-detail.html?product=${encodeURIComponent(product.id)}" aria-label="Lihat ${escapeHTML(product.name)} dari ${escapeHTML(product.brand)}">
+          <span class="product-card-image"><img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.brand)} ${escapeHTML(product.name)}" loading="lazy"></span>
+          <span class="add-to-cart-status" role="status" aria-live="polite"></span>
+          <span class="product-card-info">
+            <span class="product-name">${escapeHTML(product.name)}</span>
+            <span class="product-description">${escapeHTML(product.brand)} · ${escapeHTML(product.fruit)}</span>
+            <span class="product-price">From $15 <span>/ pack</span></span>
+          </span>
+        </a>
+        <button class="product-card-hint add-to-cart" type="button" data-product="${escapeHTML(product.id)}" aria-label="Tambahkan ${escapeHTML(product.name)} ke cart"><span class="add-to-cart-icon" aria-hidden="true">+</span></button>
+      </article>`;
+    }
+
+    collections.forEach((collection) => {
+      const items = products.filter((product) => product.collection === collection.id);
+      const slides = [];
+      for (let index = 0; index < items.length; index += 4) {
+        slides.push(items.slice(index, index + 4));
+      }
+      const section = document.createElement('section');
+      section.className = 'catalog-products-section catalog-collection';
+      section.id = collection.id;
+      section.setAttribute('aria-labelledby', `${collection.id}-title`);
+      section.innerHTML = `
+        <div class="catalog-products-heading">
+          <div class="catalog-products-title-wrap">
+            <p class="catalog-eyebrow">${escapeHTML(collection.eyebrow)}</p>
+            <div class="catalog-products-name"><span class="catalog-products-flower" aria-hidden="true">✿</span><h2 id="${collection.id}-title">${escapeHTML(collection.title)}</h2></div>
+          </div>
+          <span class="catalog-products-note">${escapeHTML(collection.note)}</span>
+        </div>
+        <div class="product-carousel" aria-label="Produk ${escapeHTML(collection.title)}">
+          <div class="collection-track">${slides.map((slide) => `<div class="collection-slide">${slide.map(renderProduct).join('')}</div>`).join('')}</div>
+        </div>
+        <div class="carousel-controls" aria-label="Navigasi ${escapeHTML(collection.title)}">
+          <button class="carousel-button collection-previous" type="button" aria-label="Produk sebelumnya">←</button>
+          <span class="carousel-position" aria-live="polite"></span>
+          <button class="carousel-button collection-next" type="button" aria-label="Produk berikutnya">→</button>
+        </div>`;
+      collectionsRoot.append(section);
+    });
+
+    const searchInput = document.querySelector('#product-search');
+    const suggestions = document.querySelector('#product-suggestions');
+    const emptyMessage = document.querySelector('#search-empty');
+    const cards = [...document.querySelectorAll('[data-product-card]')];
+    const normalize = (value) => value.toLocaleLowerCase('id').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, 'and');
+    const matchesQuery = (value, query) => query.length === 1
+      ? normalize(value).split(/\s+/).some((word) => word.startsWith(query))
+      : normalize(value).includes(query);
+
+    function updateCollection(collection) {
+      const track = collection.querySelector('.collection-track');
+      const slides = [...track.querySelectorAll('.collection-slide')];
+      const visibleSlides = slides.filter((slide) => !slide.hidden);
+      const count = visibleSlides.reduce((total, slide) => total + slide.querySelectorAll('.product-card:not([hidden])').length, 0);
+      const controls = collection.querySelector('.carousel-controls');
+      const position = controls.querySelector('.carousel-position');
+      const currentSlide = Math.min(Math.round(track.scrollLeft / Math.max(1, track.clientWidth)), visibleSlides.length - 1);
+      const visibleProducts = visibleSlides.flatMap((slide) => [...slide.querySelectorAll('.product-card:not([hidden])')]);
+      if (!count) {
+        position.textContent = '0 / 0';
+      } else {
+        const current = visibleSlides[currentSlide];
+        const currentProducts = [...current.querySelectorAll('.product-card:not([hidden])')];
+        const first = visibleProducts.indexOf(currentProducts[0]) + 1;
+        const last = first + currentProducts.length - 1;
+        position.textContent = `${String(first).padStart(2, '0')}–${String(last).padStart(2, '0')} / ${String(count).padStart(2, '0')}`;
+      }
+      controls.hidden = visibleSlides.length <= 1;
+    }
+
+    function filterProducts() {
+      const query = normalize(searchInput.value.trim());
+      cards.forEach((card) => {
+        const product = products.find((item) => item.id === card.dataset.productCard);
+        card.hidden = Boolean(query) && ![product.name, product.brand, product.fruit].some((value) => matchesQuery(value, query));
+      });
+      document.querySelectorAll('.catalog-collection').forEach((collection) => {
+        collection.querySelectorAll('.collection-slide').forEach((slide) => {
+          slide.hidden = !slide.querySelector('.product-card:not([hidden])');
+        });
+        collection.hidden = !collection.querySelector('.product-card:not([hidden])');
+        collection.querySelector('.collection-track').scrollLeft = 0;
+        updateCollection(collection);
+      });
+      emptyMessage.hidden = cards.some((card) => !card.hidden);
+      renderSuggestions(query);
+    }
+
+    function renderSuggestions(query) {
+      if (!query) {
+        suggestions.hidden = true;
+        suggestions.replaceChildren();
+        return;
+      }
+      const matchingBrands = collections.filter((collection) => matchesQuery(collection.title, query));
+      const matchingProducts = products.filter((product) => matchesQuery(`${product.name} ${product.fruit}`, query)).slice(0, 6);
+      const entries = [
+        ...matchingBrands.slice(0, 3).map((collection) => ({ label: collection.title, detail: 'Merek', href: `#${collection.id}` })),
+        ...matchingProducts.map((product) => ({ label: product.fruit, detail: product.brand, href: `product-detail.html?product=${encodeURIComponent(product.id)}` }))
+      ].filter((entry, index, all) => all.findIndex((candidate) => candidate.label === entry.label) === index).slice(0, 7);
+      suggestions.innerHTML = entries.length
+        ? entries.map((entry) => `<a class="catalog-suggestion" role="option" href="${entry.href}"><span>${escapeHTML(entry.label)}</span><small>${escapeHTML(entry.detail)}</small></a>`).join('')
+        : '<p class="catalog-suggestion-empty">Tidak ada rasa atau merek yang cocok.</p>';
+      suggestions.hidden = false;
+    }
+
+    document.querySelectorAll('.catalog-collection').forEach((collection) => {
+      const track = collection.querySelector('.collection-track');
+      const move = (direction) => {
+        const pageWidth = track.clientWidth;
+        track.scrollBy({ left: direction * pageWidth, behavior: 'smooth' });
+      };
+      collection.querySelector('.collection-previous').addEventListener('click', () => move(-1));
+      collection.querySelector('.collection-next').addEventListener('click', () => move(1));
+      track.addEventListener('scroll', () => updateCollection(collection), { passive: true });
+      updateCollection(collection);
+    });
+    searchInput.addEventListener('input', filterProducts);
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.catalog-search-wrap')) suggestions.hidden = true;
+    });
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) renderSuggestions(normalize(searchInput.value.trim()));
+    });
+    if (window.location.hash) {
+      requestAnimationFrame(() => document.querySelector(window.location.hash)?.scrollIntoView());
+    }
+  </script>
+  <script src="frame-resize.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semua Produk | Aneka Snacks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="catalog-page">
+  <main class="catalog-main">
+    <section class="catalog-hero" aria-labelledby="all-products-title">
+      <div class="catalog-hero-copy">
+        <p class="catalog-eyebrow">Aneka snacks · Semua koleksi</p>
+        <h1 id="all-products-title">Semua camilan,<br>satu tempat.</h1>
+        <p>Cari rasa atau merek untuk menemukan camilan favoritmu.</p>
+        <div class="catalog-search-wrap">
+          <label class="catalog-search">
+            <span class="catalog-search-icon" aria-hidden="true">⌕</span>
+            <input id="all-products-search" type="search" placeholder="Cari rasa atau merek..." autocomplete="off" aria-label="Cari semua produk berdasarkan rasa atau merek">
+          </label>
+          <div class="catalog-search-suggestions" id="all-products-suggestions" role="listbox" aria-label="Saran pencarian" hidden></div>
+        </div>
+        <a href="#all-products-grid" class="catalog-hero-button">Lihat produk <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+    <section class="catalog-all-products-section" id="all-products-grid" aria-label="Semua produk">
+      <div class="catalog-all-products-grid"></div>
+      <p class="catalog-search-empty" id="all-products-empty" role="status" hidden>Produk tidak ditemukan. Coba kata kunci lain.</p>
+    </section>
+  </main>
+  <script src="catalog-data.js"></script>
+  <script src="cart.js"></script>
+  <script>
+    const { products, collections } = window.FREEZE_DRY_CATALOG;
+    const productGrid = document.querySelector('.catalog-all-products-grid');
+    const input = document.querySelector('#all-products-search');
+    const suggestions = document.querySelector('#all-products-suggestions');
+    const emptyMessage = document.querySelector('#all-products-empty');
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+    const normalize = (value) => value.toLocaleLowerCase('id').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, 'and');
+    const matchesQuery = (value, query) => query.length === 1
+      ? normalize(value).split(/\s+/).some((word) => word.startsWith(query))
+      : normalize(value).includes(query);
+
+    productGrid.innerHTML = products.map((product) => `<article class="product-card" data-product-card="${escapeHTML(product.id)}">
+      <a class="product-card-link" href="product-detail.html?product=${encodeURIComponent(product.id)}">
+        <span class="product-card-image"><img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.brand)} ${escapeHTML(product.name)}" loading="lazy"></span>
+        <span class="product-card-info">
+          <span class="product-name">${escapeHTML(product.name)}</span>
+          <span class="product-description">${escapeHTML(product.brand)} · ${escapeHTML(product.fruit)}</span>
+          <span class="product-price">From $15 <span>/ pack</span></span>
+          <span class="add-to-cart-status" role="status" aria-live="polite"></span>
+        </span>
+      </a>
+      <button class="product-card-hint add-to-cart" type="button" data-product="${escapeHTML(product.id)}" aria-label="Tambahkan ${escapeHTML(product.name)} ke cart"><span class="add-to-cart-icon" aria-hidden="true">+</span></button>
+    </article>`).join('');
+
+    const cards = [...productGrid.querySelectorAll('.product-card')];
+    function updateSuggestions(query) {
+      if (!query) {
+        suggestions.hidden = true;
+        suggestions.replaceChildren();
+        return;
+      }
+      const matchingBrands = collections.filter((collection) => matchesQuery(collection.title, query));
+      const matchingProducts = products.filter((product) => matchesQuery(`${product.name} ${product.fruit}`, query)).slice(0, 6);
+      const entries = [
+        ...matchingBrands.slice(0, 3).map((collection) => ({ label: collection.title, detail: 'Merek', href: `products2.html#${collection.id}` })),
+        ...matchingProducts.map((product) => ({ label: product.fruit, detail: product.brand, href: `product-detail.html?product=${encodeURIComponent(product.id)}` }))
+      ].filter((entry, index, all) => all.findIndex((candidate) => candidate.label === entry.label) === index).slice(0, 7);
+      suggestions.innerHTML = entries.length
+        ? entries.map((entry) => `<a class="catalog-suggestion" role="option" href="${entry.href}"><span>${escapeHTML(entry.label)}</span><small>${escapeHTML(entry.detail)}</small></a>`).join('')
+        : '<p class="catalog-suggestion-empty">Tidak ada rasa atau merek yang cocok.</p>';
+      suggestions.hidden = false;
+    }
+    input.addEventListener('input', () => {
+      const query = normalize(input.value.trim());
+      cards.forEach((card) => {
+        const product = products.find((item) => item.id === card.dataset.productCard);
+        card.hidden = Boolean(query) && ![product.name, product.brand, product.fruit].some((value) => matchesQuery(value, query));
+      });
+      emptyMessage.hidden = cards.some((card) => !card.hidden);
+      updateSuggestions(query);
+    });
+    input.addEventListener('focus', () => {
+      if (input.value.trim()) updateSuggestions(normalize(input.value.trim()));
+    });
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.catalog-search-wrap')) suggestions.hidden = true;
+    });
+  </script>
+  <script src="frame-resize.js"></script>
+</body>
+</html>
