@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk | Toko Buah Freeze Dried</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="detail-page">
+  <main class="detail-main">
+    <a class="detail-back" href="all-products.html">‹ Katalog</a>
+    <section class="detail-panel" aria-labelledby="product-title">
+      <div class="detail-gallery">
+        <div class="detail-thumbnails" id="detail-thumbnails" aria-label="Foto produk">
+          <button class="detail-thumbnail is-selected" type="button" data-gallery-image="buah1.jpg" aria-label="Lihat foto produk" aria-pressed="true">
+            <img src="buah1.jpg" alt="">
+          </button>
+          <button class="detail-thumbnail" type="button" data-gallery-image="buah1bugil.png" aria-label="Lihat foto kemasan" aria-pressed="false">
+            <img src="buah1bugil.png" alt="">
+          </button>
+        </div>
+        <div class="detail-image-stage">
+          <img class="detail-image" id="product-image" src="buah1.jpg" alt="Freeze-Dried Mango">
+        </div>
+      </div>
+      <div class="detail-copy">
+        <div class="detail-rating">
+          <span aria-hidden="true">✦</span>
+          <span id="product-brand">Aneka snacks · Buah pilihan</span>
+        </div>
+        <h1 id="product-title">Freeze-Dried Mango</h1>
+        <p class="detail-price" id="product-price">$15 <span>/ pack</span></p>
+        <div class="detail-description-block">
+          <h2>Deskripsi</h2>
+          <p id="product-description">Rasa tropis yang renyah</p>
+        </div>
+        <div class="detail-features">
+          <h2>Keunggulan</h2>
+          <ul>
+            <li>Buah pilihan dalam camilan praktis</li>
+            <li>Pilihan varian gula dan tiga ukuran</li>
+            <li>Harga menyesuaikan ukuran kemasan</li>
+          </ul>
+        </div>
+
+        <form class="order-form" id="product-order-form">
+          <input type="hidden" name="product" id="product-value" value="mango">
+          <label class="order-field" for="quantity">
+            Jumlah produk
+            <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required>
+          </label>
+          <label class="order-field" for="variant">
+            Varian
+            <select id="variant" name="variant">
+              <option value="normal-sugar">Normal Sugar</option>
+              <option value="less-sugar">Less Sugar</option>
+              <option value="no-sugar">No Sugar</option>
+              <option value="more-sugar">More Sugar</option>
+            </select>
+          </label>
+          <fieldset class="order-field">
+            <legend>Pilih ukuran</legend>
+            <div class="size-options">
+              <label><input type="radio" name="size" value="small" checked required> Small · $15</label>
+              <label><input type="radio" name="size" value="medium"> Medium · $20</label>
+              <label><input type="radio" name="size" value="large"> Large · $25</label>
+            </div>
+          </fieldset>
+          <div class="order-actions">
+            <button class="order-submit" type="submit" data-order-action="checkout">Pesan sekarang</button>
+            <button class="order-add" type="submit" data-order-action="cart">Masukkan Keranjang</button>
+          </div>
+          <p class="cart-feedback" id="cart-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="detail-guides" aria-label="Informasi produk dan pemesanan">
+      <details class="detail-accordion">
+        <summary>Petunjuk penyimpanan produk <span aria-hidden="true">+</span></summary>
+        <p>Simpan kemasan dalam keadaan tertutup rapat di tempat yang sejuk dan kering agar camilan tetap renyah.</p>
+      </details>
+      <details class="detail-accordion">
+        <summary>Pengiriman dan pembayaran <span aria-hidden="true">+</span></summary>
+        <p>Pilih kurir regular, express, atau same day serta metode transfer bank, e-wallet, atau COD saat checkout.</p>
+      </details>
+    </section>
+
+    <section class="detail-gift" aria-labelledby="detail-gift-title">
+      <div class="detail-gift-copy">
+        <p class="detail-section-eyebrow">Aneka snacks · Buah pilihan</p>
+        <h2 id="detail-gift-title">Camilan ceria untuk berbagi</h2>
+        <p>Pilihan buah renyah yang pas untuk menemani momen kecil bersama orang tersayang.</p>
+        <a href="all-products.html" class="detail-gift-link">Lihat semua rasa</a>
+      </div>
+      <div class="detail-gift-art" aria-hidden="true">
+        <img src="buah1bugil.png" alt="">
+        <img src="bgng1.png" alt="">
+        <span>Untukmu ♡</span>
+      </div>
+    </section>
+
+    <section class="detail-recommendations" aria-labelledby="detail-recommendations-title">
+      <h2 id="detail-recommendations-title">Kamu mungkin suka</h2>
+      <div class="detail-recommendation-grid" id="detail-recommendation-grid"></div>
+    </section>
+  </main>
+
+  <script src="catalog-data.js"></script>
+  <script>
+    const products = Object.fromEntries(window.FREEZE_DRY_CATALOG.products.map((item) => [item.id, item]));
+    const requestedProduct = new URLSearchParams(window.location.search).get('product');
+    const productKey = products[requestedProduct] ? requestedProduct : 'mango';
+    const product = products[productKey];
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+
+    document.querySelector('#product-title').textContent = product.name;
+    document.querySelector('#product-image').src = product.detailImage;
+    document.querySelector('#product-image').alt = `${product.brand} ${product.name}`;
+    document.querySelector('#product-description').textContent = product.description;
+    document.querySelector('#product-brand').textContent = `${product.brand} · ${product.fruit}`;
+    document.querySelector('#product-value').value = productKey;
+    document.querySelector('#variant').value = 'normal-sugar';
+    document.title = `${product.name} | ${product.brand}`;
+    document.querySelector('.detail-rating span:last-child').textContent = `${product.brand} · ${product.fruit}`;
+    document.querySelector('.detail-gift-copy .detail-section-eyebrow').textContent = `${product.brand} · Buah pilihan`;
+    document.querySelector('.detail-gift-copy h2').textContent = `${product.fruit} yang renyah untuk berbagi`;
+    document.querySelector('.detail-gift-art img:first-child').src = product.image;
+    document.querySelector('.detail-gift-art img:last-of-type').src = product.detailImage;
+
+    const thumbnailButtons = [...document.querySelectorAll('.detail-thumbnail')];
+    const galleryImages = [product.detailImage, product.image];
+    thumbnailButtons.forEach((button, index) => {
+      const image = galleryImages[index];
+      button.dataset.galleryImage = image;
+      button.querySelector('img').src = image;
+      button.setAttribute('aria-label', index === 0 ? `Lihat ${product.name}` : `Lihat kemasan ${product.name}`);
+      button.addEventListener('click', () => {
+        document.querySelector('#product-image').src = image;
+        thumbnailButtons.forEach((thumbnail) => {
+          const isSelected = thumbnail === button;
+          thumbnail.classList.toggle('is-selected', isSelected);
+          thumbnail.setAttribute('aria-pressed', String(isSelected));
+        });
+      });
+    });
+
+    function readPersonalization() {
+      try {
+        const cart = JSON.parse(localStorage.getItem('freezeDriedCart') || '[]');
+        const recentlyViewed = JSON.parse(localStorage.getItem('freezeDriedRecentlyViewed') || '[]');
+        if (!Array.isArray(cart) || !Array.isArray(recentlyViewed)) throw new Error('Data rekomendasi tidak valid.');
+        return { cart, recentlyViewed };
+      } catch (error) {
+        console.error('Gagal membaca preferensi rekomendasi:', error);
+        return { cart: [], recentlyViewed: [] };
+      }
+    }
+    const { cart: priorCart, recentlyViewed } = readPersonalization();
+    const viewHistory = [productKey, ...recentlyViewed.filter((id) => id !== productKey)].slice(0, 8);
+    localStorage.setItem('freezeDriedRecentlyViewed', JSON.stringify(viewHistory));
+    const cartAffinity = new Map();
+    priorCart.forEach((item) => {
+      const other = products[item.product];
+      if (!other) return;
+      cartAffinity.set(other.brand, (cartAffinity.get(other.brand) || 0) + 1);
+      cartAffinity.set(other.fruit, (cartAffinity.get(other.fruit) || 0) + 1);
+    });
+
+    const recommendations = window.FREEZE_DRY_CATALOG.products
+      .filter((item) => item.id !== productKey)
+      .map((item, index) => ({
+        item,
+        index,
+        score: (item.fruit === product.fruit ? 5 : 0)
+          + (item.brand === product.brand ? 3 : 0)
+          + (cartAffinity.get(item.fruit) || 0) * 2
+          + (cartAffinity.get(item.brand) || 0) * 2
+          + (viewHistory.includes(item.id) ? 1 : 0)
+      }))
+      .sort((left, right) => right.score - left.score || left.index - right.index)
+      .slice(0, 6)
+      .map(({ item }) => `<a class="detail-recommendation-card" href="product-detail.html?product=${encodeURIComponent(item.id)}">
+        <span class="detail-recommendation-image"><img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.brand)} ${escapeHTML(item.name)}" loading="lazy"></span>
+        <span class="detail-recommendation-info"><strong>${escapeHTML(item.name)}</strong><span>${escapeHTML(item.brand)} · ${escapeHTML(item.description)}</span><span class="detail-recommendation-price">From $15 / pack</span></span>
+        <span class="detail-recommendation-arrow" aria-hidden="true">↗</span>
+      </a>`)
+      .join('');
+    document.querySelector('#detail-recommendation-grid').innerHTML = recommendations;
+
+    const cartStorageKey = 'freezeDriedCart';
+    const sizePrices = { small: 15, medium: 20, large: 25 };
+    const orderForm = document.querySelector('#product-order-form');
+    const cartFeedback = document.querySelector('#cart-feedback');
+    let cartFeedbackTimer;
+
+    function showCartFeedback(message, isHTML = false) {
+      window.clearTimeout(cartFeedbackTimer);
+      if (isHTML) {
+        cartFeedback.innerHTML = message;
+      } else {
+        cartFeedback.textContent = message;
+      }
+      cartFeedbackTimer = window.setTimeout(() => {
+        cartFeedback.textContent = '';
+      }, 3500);
+    }
+
+    orderForm.addEventListener('change', (event) => {
+      if (event.target.name !== 'size') return;
+      document.querySelector('#product-price').innerHTML = `$${sizePrices[event.target.value]} <span>/ pack</span>`;
+    });
+
+    orderForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!orderForm.reportValidity()) return;
+
+      const formData = new FormData(orderForm);
+      let cart;
+      try {
+        const savedCart = JSON.parse(localStorage.getItem(cartStorageKey) || '[]');
+        if (!Array.isArray(savedCart)) throw new Error('Data keranjang tidak valid.');
+        cart = savedCart.filter((cartItem) => products[cartItem.product] && Number(cartItem.quantity) > 0);
+      } catch (error) {
+        console.error('Gagal membaca keranjang:', error);
+        showCartFeedback('Keranjang gagal dibaca. Coba muat ulang halaman.');
+        return;
+      }
+
+      const requestedQuantity = Number(formData.get('quantity'));
+      const currentProductQuantity = cart
+        .filter((cartItem) => cartItem.product === productKey)
+        .reduce((total, cartItem) => total + Number(cartItem.quantity), 0);
+      if (currentProductQuantity + requestedQuantity > 99) {
+        showCartFeedback('Maksimal 99 produk per jenis.');
+        return;
+      }
+
+      const usedIds = new Set(cart.map((cartItem) => String(cartItem.id)));
+      const makeItemId = () => {
+        let id = `${productKey}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+        while (usedIds.has(id)) {
+          id = `${productKey}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+        }
+        usedIds.add(id);
+        return id;
+      };
+      const variant = formData.get('variant');
+      const size = formData.get('size');
+      const existingItem = cart.find((cartItem) => (
+        cartItem.product === productKey
+        && cartItem.variant === variant
+        && cartItem.size === size
+      ));
+      if (existingItem) {
+        existingItem.quantity = Number(existingItem.quantity) + requestedQuantity;
+      } else {
+        cart.push({
+          id: makeItemId(),
+          product: productKey,
+          variant,
+          size,
+          quantity: requestedQuantity,
+          unitPrice: sizePrices[size]
+        });
+      }
+
+      localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+      if (window.parent !== window) {
+        const count = cart.reduce((total, cartItem) => total + Number(cartItem.quantity), 0);
+        window.parent.postMessage({ type: 'freeze-dried-cart-updated', count }, '*');
+      }
+
+      if (event.submitter.dataset.orderAction === 'checkout') {
+        window.location.href = 'checkout.html';
+        return;
+      }
+
+      showCartFeedback('Produk masuk keranjang. <a href="checkout.html">Lihat keranjang</a>', true);
+    });
+  </script>
+  <script src="frame-resize.js"></script>
+</body>
+</html>

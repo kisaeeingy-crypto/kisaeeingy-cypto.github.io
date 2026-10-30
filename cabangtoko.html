@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lokasi Toko | Aneka Snacks</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .store-page {
+      min-height: 100vh;
+      padding: clamp(12px, 2vw, 24px);
+      background-color: var(--snack-backdrop);
+      background-image:
+        linear-gradient(rgba(159, 37, 44, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(159, 37, 44, 0.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+      color: #503a35;
+    }
+
+    .store-main {
+      width: min(100%, 1440px);
+      margin: 0 auto;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #fffaf2;
+      box-shadow: 0 8px 24px rgba(82, 100, 67, 0.1);
+    }
+
+    .store-page .store-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: center;
+      gap: clamp(20px, 4vw, 42px);
+      padding: clamp(24px, 4vw, 48px);
+      background-color: #fffaf2;
+      background-image:
+        linear-gradient(rgba(82, 100, 67, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(82, 100, 67, 0.08) 1px, transparent 1px);
+      background-size: 30px 30px;
+      color: #503a35;
+      text-align: left;
+    }
+
+    .store-hero-copy {
+      position: relative;
+      padding: 16px 8px;
+    }
+
+    .store-hero-copy::after {
+      position: absolute;
+      right: 2px;
+      bottom: 0;
+      color: #b6222d;
+      content: "✿";
+      font-size: 30px;
+      transform: rotate(14deg);
+    }
+
+    .store-eyebrow {
+      margin: 0 0 14px;
+      color: #a64239;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .store-hero h1 {
+      max-width: 440px;
+      margin: 0;
+      color: #a91f2a;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 600;
+      letter-spacing: -0.055em;
+      line-height: 0.94;
+    }
+
+    .store-intro {
+      max-width: 380px;
+      margin: 16px 0 20px;
+      color: #604b40;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .store-hero-address {
+      max-width: 360px;
+      margin: 0 0 20px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #604b40;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .store-hero-address strong {
+      color: #a91f2a;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    .store-page .store-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    .store-nav a {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 20px;
+      border: 1px solid #d8c9ba;
+      border-radius: 999px;
+      color: #604b40;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    .store-nav a:first-child,
+    .store-nav a:hover,
+    .store-nav a:focus-visible {
+      border-color: #b6222d;
+      background: #b6222d;
+      color: #fff8ed;
+    }
+
+    .store-location-ribbon {
+      overflow: hidden;
+      margin: 0 calc(-1 * clamp(16px, 3vw, 30px));
+      padding: 11px 0;
+      background: #dce5ca;
+      color: var(--snack-sage-ink);
+    }
+
+    .store-location-ribbon-track {
+      display: flex;
+      width: max-content;
+      animation: store-location-scroll 28s linear infinite;
+    }
+
+    .store-location-ribbon-track span {
+      padding-right: 24px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .store-location-ribbon-track b {
+      margin: 0 14px;
+      color: var(--snack-sage-deep);
+    }
+
+    @keyframes store-location-scroll {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .store-nav a:focus-visible,
+    .store-map-link:focus-visible {
+      outline: 3px solid #d8a59a;
+      outline-offset: 3px;
+    }
+
+    .store-section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .store-section-heading .store-eyebrow {
+      margin-bottom: 5px;
+    }
+
+    .store-section-heading h2,
+    .store-map-heading h2 {
+      margin: 0;
+      color: #a91f2a;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(27px, 4vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .store-branches {
+      margin-top: clamp(25px, 4vw, 42px);
+      padding: 0 clamp(20px, 4vw, 48px);
+    }
+
+    .store-world-map {
+      position: relative;
+      aspect-ratio: 25 / 14;
+      overflow: hidden;
+      border: 1px solid #e5d7c9;
+      border-radius: 16px;
+      background-color: #f3f1e9;
+      background-image:
+        linear-gradient(rgba(169, 31, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(169, 31, 42, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .store-world-map img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .store-map-pin {
+      position: absolute;
+      z-index: 1;
+      display: grid;
+      width: clamp(16px, 1.8vw, 19px);
+      height: clamp(16px, 1.8vw, 19px);
+      place-items: center;
+      border: 2px solid #fffaf2;
+      border-radius: 50%;
+      background: #b6222d;
+      color: #fff8ed !important;
+      font-size: clamp(8px, 1vw, 10px);
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      box-shadow: 0 2px 7px rgba(80, 58, 53, 0.24);
+      transform: translate(calc(-50% + var(--pin-x, 0px)), calc(-50% + var(--pin-y, 0px)));
+      transition: background-color 160ms ease, scale 160ms ease;
+    }
+
+    .store-map-pin::after {
+      position: absolute;
+      bottom: calc(100% + 9px);
+      left: 50%;
+      z-index: 3;
+      padding: 7px 10px;
+      border: 1px solid #ead5c8;
+      border-radius: 7px;
+      background: #fffaf2;
+      color: #a91f2a;
+      content: attr(aria-label);
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(80, 58, 53, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 4px);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .store-map-pin:hover::after,
+    .store-map-pin:focus-visible::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .store-map-pin:hover,
+    .store-map-pin:focus-visible {
+      z-index: 2;
+      background: var(--snack-sage-deep);
+      scale: 1.2;
+    }
+
+    .store-map-pin:focus-visible {
+      outline: 3px solid #fffaf2;
+      outline-offset: 2px;
+    }
+
+    .store-branch-counts {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .store-branch-count {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid #ead5c8;
+      border-radius: 10px;
+      background: #f8eee2;
+      color: #604b40;
+      font-size: 12px;
+    }
+
+    .store-branch-count strong {
+      color: #a91f2a;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .store-branch-note {
+      margin: 12px 0 0;
+      color: #74645a;
+      font-size: 11px;
+    }
+
+    .store-map-section {
+      margin-top: clamp(38px, 6vw, 66px);
+      padding: 0 clamp(20px, 4vw, 48px);
+    }
+
+    .store-map-frame {
+      display: block;
+      width: 100%;
+      min-height: 280px;
+      height: clamp(280px, 32vw, 390px);
+      border: 1px solid #e5c4b5;
+      border-radius: 12px;
+      background: #f8eee2;
+    }
+
+    .store-map-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 15px;
+    }
+
+    .store-map-heading p {
+      max-width: 390px;
+      margin: 0;
+      color: #74645a;
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .store-retailers {
+      margin-top: clamp(38px, 6vw, 66px);
+      padding: clamp(24px, 4vw, 38px);
+      border-radius: 8px;
+      background: var(--snack-sage-deep);
+      color: #fffaf2;
+    }
+
+    .store-retailers-heading {
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .store-retailers-heading .store-eyebrow {
+      color: var(--snack-sage-soft);
+    }
+
+    .store-retailers-heading h2 {
+      margin: 0;
+      color: #fffaf2;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 4.5vw, 42px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .store-retailers-paper {
+      position: relative;
+      padding: 48px clamp(12px, 2vw, 24px) 24px;
+      background: #fffaf2;
+      box-shadow: 0 6px 16px rgba(28, 38, 24, 0.16);
+    }
+
+    .store-notebook-holes {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      display: grid;
+      height: 1px;
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+      pointer-events: none;
+    }
+
+    .store-notebook-holes span {
+      width: clamp(8px, 1.2vw, 16px);
+      aspect-ratio: 1;
+      justify-self: center;
+      border-radius: 50%;
+      background: var(--snack-sage-deep);
+      transform: translateY(-50%);
+    }
+
+    .store-retailer-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .store-retailer-region {
+      padding: 14px;
+      border: 1px solid #b9c5a7;
+      background: #fffdf8;
+    }
+
+    .store-retailer-region h3 {
+      margin: 0 0 12px;
+      color: #a91f2a;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+    }
+
+    .store-retailer-country + .store-retailer-country {
+      margin-top: 12px;
+      padding-top: 0;
+    }
+
+    .store-retailer-country h4 {
+      margin: 0 0 5px;
+      color: #49312a;
+      font-size: 11px;
+    }
+
+    .store-retailer-country p {
+      margin: 0;
+      color: #74645a;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .store-retailers-note {
+      margin: 16px 0 0;
+      color: #74645a;
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @media (max-width: 620px) {
+      .store-page {
+        padding: 10px;
+      }
+
+      .store-main {
+        border-radius: 16px;
+      }
+
+      .store-page .store-hero {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 22px 16px 16px;
+      }
+
+      .store-hero-copy {
+        padding: 14px 4px 8px;
+      }
+
+      .store-hero-copy::after {
+        right: 2px;
+        bottom: 0;
+      }
+
+      .store-hero h1 {
+        font-size: clamp(42px, 11vw, 58px);
+      }
+
+      .store-section-heading h2 {
+        font-size: 30px;
+      }
+
+      .store-location-ribbon {
+        margin-right: -12px;
+        margin-left: -12px;
+      }
+
+      .store-branch-counts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .store-branch-count {
+        padding: 10px;
+        font-size: 11px;
+      }
+
+      .store-map-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .store-map-heading p {
+        text-align: left;
+      }
+
+      .store-retailer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .store-retailer-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .store-location-ribbon-track {
+        animation: none;
+      }
+    }
+
+  </style>
+</head>
+<body class="info-page store-page">
+  <main class="store-main">
+    <header class="store-hero">
+      <div class="store-hero-copy">
+        <p class="store-eyebrow">ANEKA SNACKS · TOKO CABANG</p>
+        <h1>Temukan Kami Hari Ini</h1>
+        <p class="store-intro">Cari cabang Aneka Snacks dan lihat lokasi toko utama kami di Bandung.</p>
+        <p class="store-hero-address"><strong>LOKASI TOKO UTAMA</strong><br>Jl. Kawista, Cigadung, Kota Bandung, Jawa Barat 40191</p>
+        <nav class="store-nav" aria-label="Navigasi lokasi toko">
+          <a href="#peta-cabang">Lihat cabang</a>
+          <a href="#daftar-toko">Toko sekitar cabang</a>
+        </nav>
+      </div>
+      <iframe
+        class="store-map-frame"
+        id="peta-google"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.1427851811527!2d107.62552600927825!3d-6.87348979309656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e71b7f85ea37%3A0x186226ea28995c61!2sJl.%20Kawista%2C%20Cigadung%2C%20Kec.%20Cibeunying%20Kaler%2C%20Kota%20Bandung%2C%20Jawa%20Barat%2040191!5e0!3m2!1sen!2sid!4v1791079225109!5m2!1sen!2sid"
+        title="Google Maps lokasi toko utama Aneka Snacks di Jalan Kawista, Bandung"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+    </header>
+
+    <div class="store-location-ribbon" aria-label="Lokasi cabang: Sydney, Australia, Paris, London, Roma, Berlin, Madrid, New York, Los Angeles, Mexico City, Sao Paulo, Kairo, Johannesburg, Tokyo, Seoul, Mumbai, Bangkok, Singapura, dan Bandung">
+      <div class="store-location-ribbon-track" aria-hidden="true">
+        <span>Sydney, Australia <b>✦</b> Paris <b>✦</b> London <b>✦</b> Roma <b>✦</b> Berlin <b>✦</b> Madrid <b>✦</b> New York <b>✦</b> Los Angeles <b>✦</b> Mexico City <b>✦</b> Sao Paulo <b>✦</b> Kairo <b>✦</b> Johannesburg <b>✦</b> Tokyo <b>✦</b> Seoul <b>✦</b> Mumbai <b>✦</b> Bangkok <b>✦</b> Singapura <b>✦</b> Bandung <b>✦</b></span>
+        <span>Sydney, Australia <b>✦</b> Paris <b>✦</b> London <b>✦</b> Roma <b>✦</b> Berlin <b>✦</b> Madrid <b>✦</b> New York <b>✦</b> Los Angeles <b>✦</b> Mexico City <b>✦</b> Sao Paulo <b>✦</b> Kairo <b>✦</b> Johannesburg <b>✦</b> Tokyo <b>✦</b> Seoul <b>✦</b> Mumbai <b>✦</b> Bangkok <b>✦</b> Singapura <b>✦</b> Bandung <b>✦</b></span>
+      </div>
+    </div>
+
+    <section class="store-branches" id="peta-cabang" aria-labelledby="store-location-title">
+      <div class="store-section-heading">
+        <div>
+          <p class="store-eyebrow">18 LOKASI · 5 KAWASAN</p>
+          <h2 id="store-location-title">Cabang Kami</h2>
+        </div>
+        <span aria-hidden="true">✿</span>
+      </div>
+
+      <div class="store-world-map" role="group" aria-label="Peta dunia dengan 18 titik cabang Aneka Snacks">
+        <img src="world-map.svg" alt="Peta dunia dengan garis batas negara; kontur berdasarkan data Natural Earth">
+
+        <a class="store-map-pin" style="left:50.65%;top:24.41%;--pin-x:5px;--pin-y:6px" href="https://www.google.com/maps/search/?api=1&amp;query=Paris+France" target="_blank" rel="noopener noreferrer" aria-label="Cabang Paris, Prancis">✿</a>
+        <a class="store-map-pin" style="left:49.96%;top:22.56%;--pin-x:-5px;--pin-y:-6px" href="https://www.google.com/maps/search/?api=1&amp;query=London+United+Kingdom" target="_blank" rel="noopener noreferrer" aria-label="Cabang London, Inggris">✿</a>
+        <a class="store-map-pin" style="left:53.47%;top:29.23%" href="https://www.google.com/maps/search/?api=1&amp;query=Rome+Italy" target="_blank" rel="noopener noreferrer" aria-label="Cabang Roma, Italia">✿</a>
+        <a class="store-map-pin" style="left:53.72%;top:21.86%" href="https://www.google.com/maps/search/?api=1&amp;query=Berlin+Germany" target="_blank" rel="noopener noreferrer" aria-label="Cabang Berlin, Jerman">✿</a>
+        <a class="store-map-pin" style="left:48.97%;top:30.27%" href="https://www.google.com/maps/search/?api=1&amp;query=Madrid+Spain" target="_blank" rel="noopener noreferrer" aria-label="Cabang Madrid, Spanyol">✿</a>
+        <a class="store-map-pin" style="left:29.44%;top:30.06%" href="https://www.google.com/maps/search/?api=1&amp;query=New+York+USA" target="_blank" rel="noopener noreferrer" aria-label="Cabang New York, Amerika Serikat">✿</a>
+        <a class="store-map-pin" style="left:17.15%;top:34.69%" href="https://www.google.com/maps/search/?api=1&amp;query=Los+Angeles+USA" target="_blank" rel="noopener noreferrer" aria-label="Cabang Los Angeles, Amerika Serikat">✿</a>
+        <a class="store-map-pin" style="left:22.46%;top:44.84%" href="https://www.google.com/maps/search/?api=1&amp;query=Mexico+City+Mexico" target="_blank" rel="noopener noreferrer" aria-label="Cabang Mexico City, Meksiko">✿</a>
+        <a class="store-map-pin" style="left:37.05%;top:74.69%" href="https://www.google.com/maps/search/?api=1&amp;query=Sao+Paulo+Brazil" target="_blank" rel="noopener noreferrer" aria-label="Cabang Sao Paulo, Brasil">✿</a>
+        <a class="store-map-pin" style="left:58.68%;top:37.47%" href="https://www.google.com/maps/search/?api=1&amp;query=Cairo+Egypt" target="_blank" rel="noopener noreferrer" aria-label="Cabang Kairo, Mesir">✿</a>
+        <a class="store-map-pin" style="left:57.79%;top:76.53%" href="https://www.google.com/maps/search/?api=1&amp;query=Johannesburg+South+Africa" target="_blank" rel="noopener noreferrer" aria-label="Cabang Johannesburg, Afrika Selatan">✿</a>
+        <a class="store-map-pin" style="left:88.80%;top:33.55%" href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo+Japan" target="_blank" rel="noopener noreferrer" aria-label="Cabang Tokyo, Jepang">✿</a>
+        <a class="store-map-pin" style="left:85.27%;top:32.25%" href="https://www.google.com/maps/search/?api=1&amp;query=Seoul+South+Korea" target="_blank" rel="noopener noreferrer" aria-label="Cabang Seoul, Korea Selatan">✿</a>
+        <a class="store-map-pin" style="left:70.24%;top:45.09%" href="https://www.google.com/maps/search/?api=1&amp;query=Mumbai+India" target="_blank" rel="noopener noreferrer" aria-label="Cabang Mumbai, India">✿</a>
+        <a class="store-map-pin" style="left:77.92%;top:48.78%" href="https://www.google.com/maps/search/?api=1&amp;query=Bangkok+Thailand" target="_blank" rel="noopener noreferrer" aria-label="Cabang Bangkok, Thailand">✿</a>
+        <a class="store-map-pin" style="left:78.84%;top:57.39%" href="https://www.google.com/maps/search/?api=1&amp;query=Singapore" target="_blank" rel="noopener noreferrer" aria-label="Cabang Singapura">✿</a>
+        <a class="store-map-pin" style="left:79.89%;top:63.14%" href="https://www.google.com/maps/search/?api=1&amp;query=Bandung+Indonesia" target="_blank" rel="noopener noreferrer" aria-label="Cabang Bandung, Indonesia">✿</a>
+        <a class="store-map-pin" style="left:92%;top:73.5%" href="https://www.google.com/maps/search/?api=1&amp;query=Sydney+Australia" target="_blank" rel="noopener noreferrer" aria-label="Cabang Sydney, Australia">✿</a>
+      </div>
+
+      <div class="store-branch-counts" aria-label="Jumlah cabang di setiap kawasan">
+        <div class="store-branch-count"><strong>05</strong><span>Eropa</span></div>
+        <div class="store-branch-count"><strong>04</strong><span>Amerika</span></div>
+        <div class="store-branch-count"><strong>02</strong><span>Afrika</span></div>
+        <div class="store-branch-count"><strong>06</strong><span>Asia</span></div>
+        <div class="store-branch-count"><strong>01</strong><span>Oseania</span></div>
+      </div>
+      <p class="store-branch-note">Kontur negara: Natural Earth. Pilih ikon cabang untuk membuka kota tersebut di Google Maps.</p>
+    </section>
+
+    <section class="store-retailers" id="daftar-toko" aria-labelledby="store-retailers-title">
+      <div class="store-retailers-heading">
+        <p class="store-eyebrow">TEMUKAN CAMILAN DI SEKITARMU</p>
+        <h2 id="store-retailers-title">You can find us at</h2>
+      </div>
+      <div class="store-retailers-paper">
+        <div class="store-notebook-holes" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="store-retailer-grid">
+          <section class="store-retailer-region" aria-labelledby="store-retailer-europe">
+            <h3 id="store-retailer-europe">Eropa</h3>
+            <div class="store-retailer-country"><h4>Prancis · Paris</h4><p>Carrefour · E.Leclerc</p></div>
+            <div class="store-retailer-country"><h4>Inggris · London</h4><p>Tesco · Sainsbury's</p></div>
+            <div class="store-retailer-country"><h4>Italia · Roma</h4><p>Conad · Coop</p></div>
+            <div class="store-retailer-country"><h4>Jerman · Berlin</h4><p>EDEKA · REWE · ALDI</p></div>
+            <div class="store-retailer-country"><h4>Spanyol · Madrid</h4><p>Mercadona · Carrefour</p></div>
+          </section>
+
+          <section class="store-retailer-region" aria-labelledby="store-retailer-americas">
+            <h3 id="store-retailer-americas">Amerika</h3>
+            <div class="store-retailer-country"><h4>Amerika Serikat · New York &amp; Los Angeles</h4><p>Walmart · Target · Trader Joe's</p></div>
+            <div class="store-retailer-country"><h4>Meksiko · Mexico City</h4><p>Walmart · Soriana · Chedraui</p></div>
+            <div class="store-retailer-country"><h4>Brasil · Sao Paulo</h4><p>Carrefour · Assaí Atacadista · Pão de Açúcar</p></div>
+          </section>
+
+          <section class="store-retailer-region" aria-labelledby="store-retailer-africa">
+            <h3 id="store-retailer-africa">Afrika</h3>
+            <div class="store-retailer-country"><h4>Mesir · Kairo</h4><p>Carrefour · Spinneys</p></div>
+            <div class="store-retailer-country"><h4>Afrika Selatan · Johannesburg</h4><p>Shoprite · Pick n Pay · Woolworths</p></div>
+          </section>
+
+          <section class="store-retailer-region" aria-labelledby="store-retailer-asia">
+            <h3 id="store-retailer-asia">Asia</h3>
+            <div class="store-retailer-country"><h4>Jepang · Tokyo</h4><p>AEON · Life · Seiyu</p></div>
+            <div class="store-retailer-country"><h4>Korea Selatan · Seoul</h4><p>Emart · Lotte Mart</p></div>
+            <div class="store-retailer-country"><h4>India · Mumbai</h4><p>DMart · Reliance Smart Bazaar</p></div>
+            <div class="store-retailer-country"><h4>Thailand · Bangkok</h4><p>Big C · Lotus's</p></div>
+            <div class="store-retailer-country"><h4>Singapura</h4><p>FairPrice · Sheng Siong · Cold Storage</p></div>
+            <div class="store-retailer-country"><h4>Indonesia · Bandung</h4><p>Indomaret · Alfamart · Super Indo</p></div>
+          </section>
+
+          <section class="store-retailer-region" aria-labelledby="store-retailer-oceania">
+            <h3 id="store-retailer-oceania">Oseania</h3>
+            <div class="store-retailer-country"><h4>Australia · Sydney</h4><p>Woolworths · Coles · ALDI</p></div>
+          </section>
+        </div>
+        <p class="store-retailers-note">Nama di atas adalah contoh jaringan grocery yang beroperasi di negara-negara tersebut, bukan konfirmasi bahwa produk Aneka Snacks tersedia di setiap tokonya.</p>
+      </div>
+    </section>
+  </main>
+<script src="frame-resize.js"></script>
+</body>
+</html>
